@@ -1,0 +1,79 @@
+/* Noisefilter – Darstellung auf x.com
+   Zustand steht in data-nf-state (X überschreibt Klassen, data-Attribute nicht). */
+
+/* Eingeklappt: Inhalt nur verstecken, wenn das eigene Banner wirklich da ist.
+   Fehlt es (X hat neu gerendert), bleibt der Post sichtbar statt einer leeren Fläche. */
+article[data-nf-state="collapsed"]:has(> .nf-banner) {
+  display: block !important;
+}
+
+article[data-nf-state="collapsed"]:has(> .nf-banner) > :not(.nf-banner) {
+  display: none !important;
+}
+
+.nf-banner,
+.nf-tag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: rgb(113, 118, 123);
+}
+
+.nf-banner {
+  padding: 10px 16px;
+  cursor: default;
+}
+
+/* Kleines Etikett als eigene Zeile direkt unter dem Post (Geschwister des article). */
+.nf-tag {
+  justify-content: flex-end;
+  padding: 0 16px 6px;
+  font-size: 12px;
+}
+
+.nf-banner button,
+.nf-tag button {
+  font: inherit;
+  color: rgb(29, 155, 240);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.nf-banner button:hover,
+.nf-tag button:hover {
+  text-decoration: underline;
+}
+
+.nf-banner button:focus-visible,
+.nf-tag button:focus-visible {
+  outline: 2px solid rgb(29, 155, 240);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.nf-dim {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+#nf-pill {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2147483647;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 20, 25, 0.88);
+  color: #fff;
+  font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  pointer-events: none;
+}
+
+#nf-pill.nf-pill-error {
+  background: rgba(196, 48, 43, 0.95);
+}

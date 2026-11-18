@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><title>Fixture – X-Feed</title>
+<style>
+  body { background: #000; color: #e7e9ea; font: 15px system-ui; margin: 0; }
+  [data-testid="primaryColumn"] { width: 600px; border: 1px solid #2f3336; }
+  /* Wie bei X: article ist ein Flex-Container in Zeilenrichtung. */
+  article { display: flex; flex-direction: row; border-bottom: 1px solid #2f3336; padding: 12px 16px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: #333; flex: none; margin-right: 12px; }
+</style></head>
+<body>
+<div data-testid="primaryColumn" id="col"></div>
+<script>
+  // Vereinfachter Nachbau der X-Timeline mit React-typischen Eigenheiten (synthetische Daten).
+  const posts = [
+    { id: "301", user: "analystin", text: "Anthropic S-1: Umsatz-Run-Rate 9 Mrd $, Ausgabepreis 120 $, Lock-up 180 Tage." },
+    { id: "302", user: "empoert1", text: "Anthropic ist so böse!!! Erinnert ihr euch an das Paper von 2023? Teilen!!!" },
+    { id: "303", user: "koeder", text: "Wer stimmt zu? Like wenn ja 👇" },
+    { id: "304", user: "empoert2", text: "Anthropic ist so böse!! Erinnert ihr euch an das Paper von 2023? Teilen!!" },
+    { id: "305", user: "fotograf", text: "", media: true },
+    { id: "306", user: "zugespitzt", text: "Empörende Analyse, aber mit Zahlen: Die Bewertung steigt um 5 % pro Woche." },
+    { id: "307", user: "meinung", text: "Ich halte den IPO-Zeitpunkt für zu früh." },
+  ];
+  function inner(t) {
+    return `<div class="avatar"></div><div class="body">
+      <div data-testid="User-Name"><a href="/${t.user}">${t.user}</a></div>
+      <a href="/${t.user}/status/${t.id}"><time datetime="2026-11-18T10:00:00Z">1h</time></a>
+      ${t.text ? `<div data-testid="tweetText">${t.text}</div>` : ""}
+      ${t.media ? `<div data-testid="tweetPhoto"><img alt=""></div>` : ""}
+    </div>`;
+  }
+  const col = document.getElementById("col");
+  col.innerHTML =
+    posts.map((t) => `<div data-testid="cellInnerDiv"><article data-testid="tweet" class="css-a">${inner(t)}</article></div>`).join("") +
+    // Werbung ohne Zeitstempel-Link: muss ignoriert werden.
+    `<div data-testid="cellInnerDiv"><article data-testid="tweet" class="css-a"><div data-testid="tweetText">Anzeige: Kauf jetzt!</div></article></div>`;
+
+  const find = (id) => [...document.querySelectorAll("article")].find((a) => a.querySelector(`a[href$="/status/${id}"]`));
+  // React verwendet ein <article> für einen anderen Post weiter.
+  window.reuse = (oldId, t) => { find(oldId).replaceChildren(...new DOMParser().parseFromString(`<div>${inner(t)}</div>`, "text/html").body.firstChild.childNodes); };
+  // React rendert die Kinder neu (fremde Knoten wie unser Banner verschwinden).
+  window.rerender = (id) => { const a = find(id); const t = posts.find((p) => p.id === id); a.innerHTML = inner(t); };
+  // React überschreibt das class-Attribut.
+  window.clobberClasses = () => document.querySelectorAll("article").forEach((a) => (a.className = "css-b"));
+</script>
+</body>
+</html>

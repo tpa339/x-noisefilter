@@ -1,0 +1,14 @@
+# Signaturschlüssel und gepackte Builds niemals einchecken
+*.pem
+*.crx
+*.zip
+
+# Lokale Werkzeuge
+.claude/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Secrets
+.env
+.env.*

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Noisefilter Einstellungen</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <h1>Noisefilter für X</h1>
+    <p class="lead">Klappt Posts im Feed ein, die keinen konkreten Gehalt haben oder vor allem auf Empörung und Engagement zielen. Optional auch Antworten unter einem geöffneten Post. Bewertet wird mit einem Decision-Modell über OpenRouter.</p>
+
+    <section>
+      <h2>Zugang</h2>
+      <label for="apiKey">OpenRouter-API-Key</label>
+      <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-or-…">
+      <p class="hint">Wird nur lokal in diesem Browser gespeichert. Lege den Key mit einem Credit-Limit an, z. B. 2 $.</p>
+      <label for="model">Modell</label>
+      <input id="model" type="text" spellcheck="false">
+      <div class="row">
+        <button id="save" type="button">Speichern</button>
+        <button id="test" type="button" class="secondary">Key testen</button>
+      </div>
+      <output id="status" role="status"></output>
+    </section>
+
+    <section>
+      <h2>Filter</h2>
+      <label class="check"><input id="enabled" type="checkbox"> Filter aktiv</label>
+      <label class="check"><input id="filterFeed" type="checkbox"> Posts im Feed bewerten (Timeline, Suche, Listen, Profile)</label>
+      <label class="check"><input id="filterReplies" type="checkbox"> Antworten unter einem geöffneten Post bewerten</label>
+      <label class="check"><input id="debug" type="checkbox"> Wahrscheinlichkeiten an jedem Post zeigen</label>
+      <label for="gehaltThreshold">Einklappen, wenn „Gehalt“ unter <strong id="gehaltVal"></strong></label>
+      <input id="gehaltThreshold" type="range" min="0.05" max="0.95" step="0.05">
+      <label for="baitThreshold">Feed: einklappen, wenn „Köder/Empörung“ ab <strong id="baitVal"></strong></label>
+      <input id="baitThreshold" type="range" min="0.05" max="0.95" step="0.05">
+      <label for="bezugThreshold">Antworten: einklappen, wenn „Bezug zum Post“ unter <strong id="bezugVal"></strong></label>
+      <input id="bezugThreshold" type="range" min="0.05" max="0.95" step="0.05">
+      <p class="hint">Schwellen wirken auch auf schon bewertete Posts, ohne neue Kosten. Posts mit sehr viel Gehalt (ab 80 %) werden nie als Köder eingeklappt.</p>
+    </section>
+
+    <section>
+      <h2>Diagnose</h2>
+      <p class="hint">Schickt 8 feste Beispielposts (3 gut, 5 Noise) in drei Fragestellungen an Jev und zeigt, welche am besten trennt. Kosten unter 0,1 Cent.</p>
+      <div class="row"><button id="diagnose" type="button" class="secondary">Diagnose starten</button></div>
+      <output id="diagStatus" role="status"></output>
+      <div id="diagOut"></div>
+    </section>
+
+    <section>
+      <h2>Auswertung</h2>
+      <dl id="stats"></dl>
+      <p class="hint">„falsch eingeklappt“ und „ist Noise“ an den Antworten landen hier. So siehst du, wie oft der Filter danebenliegt. Die letzten 8 Markierungen je Richtung gehen außerdem als Beispiele an Jev, damit ähnliche Antworten künftig wie von dir entschieden werden.</p>
+      <div class="row">
+        <button id="export" type="button" class="secondary">Protokoll als JSON exportieren</button>
+        <button id="clear" type="button" class="danger">Cache und Protokoll löschen</button>
+      </div>
+    </section>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

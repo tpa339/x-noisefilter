@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Noisefilter für X",
+  "version": "0.2.0",
+  "description": "Klappt Posts im X-Feed ein, die keinen konkreten Gehalt haben oder vor allem auf Empörung und Engagement zielen.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*",
+    "https://openrouter.ai/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://x.com/*", "https://twitter.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Noisefilter – Einstellungen"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
